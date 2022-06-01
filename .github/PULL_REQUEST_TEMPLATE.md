@@ -11,10 +11,10 @@ Summary of approach.
 [//]: # (Stay ahead of things, add list items here!)
 - [ ] Clean up commit history
 
-[//]: # (For important changes that should go into the release notes please add a newsfragment file as explained here: https://github.com/ethereum/eth-abi/blob/master/newsfragments/README.md)
+[//]: # (For important changes that should go into the release notes please add a newsfragment file as explained here: https://github.com/platonnetwork/platon-abi/blob/master/newsfragments/README.md)
 
-[//]: # (See: https://eth-abi.readthedocs.io/en/latest/contributing.html#pull-requests)
-- [ ] Add entry to the [release notes](https://github.com/ethereum/eth-abi/blob/master/newsfragments/README.md)
+[//]: # (See: https://platon-abi.readthedocs.io/en/latest/contributing.html#pull-requests)
+- [ ] Add entry to the [release notes](https://github.com/platonnetwork/platon-abi/blob/master/newsfragments/README.md)
 
 #### Cute Animal Picture
 

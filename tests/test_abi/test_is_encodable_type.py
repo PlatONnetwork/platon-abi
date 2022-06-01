@@ -1,6 +1,6 @@
 import pytest
 
-from eth_abi import (
+from platon_abi import (
     is_encodable_type,
 )
 from tests.common.unit import (

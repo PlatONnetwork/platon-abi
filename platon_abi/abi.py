@@ -1,7 +1,7 @@
-from eth_abi.codec import (
+from platon_abi.codec import (
     ABICodec,
 )
-from eth_abi.registry import (
+from platon_abi.registry import (
     registry,
 )
 

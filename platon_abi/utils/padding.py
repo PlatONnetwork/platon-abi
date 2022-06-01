@@ -1,4 +1,4 @@
-from eth_utils.toolz import (
+from platon_utils.toolz import (
     curry,
 )
 

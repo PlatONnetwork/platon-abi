@@ -3,12 +3,12 @@ import itertools
 
 import pytest
 
-from eth_abi import (
+from platon_abi import (
     decoding,
     encoding,
     exceptions,
 )
-from eth_abi.registry import (
+from platon_abi.registry import (
     ABIRegistry,
     BaseEquals,
     has_arrlist,

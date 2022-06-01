@@ -1,7 +1,7 @@
-Welcome to the eth-abi documentation!
+Welcome to the platon-abi documentation!
 =====================================
 
-The ``eth-abi`` library provides low level utilities for converting python
+The ``platon-abi`` library provides low level utilities for converting python
 values to and from solidity's binary ABI format.
 
 For detailed information on ABI types and their encodings, refer to the
@@ -11,8 +11,8 @@ For detailed information on ABI types and their encodings, refer to the
 Credit
 ------
 
-Though much of the code has been revised, the ``eth-abi`` library was
-originally extracted from the ``pyethereum`` library which was authored by
+Though much of the code has been revised, the ``platon-abi`` library was
+originally extracted from the ``pyplaton`` library which was authored by
 Vitalik Buterin.
 
 Table of Contents
@@ -28,7 +28,7 @@ Table of Contents
     nested_dynamic_arrays
     grammar
     tools
-    eth_abi
+    platon_abi
     release_notes
 
 

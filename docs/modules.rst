@@ -1,7 +1,7 @@
-eth-abi
+platon-abi
 =======
 
 .. toctree::
    :maxdepth: 4
 
-   eth_abi
+   platon_abi

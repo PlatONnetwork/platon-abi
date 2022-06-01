@@ -1,12 +1,12 @@
 import sys
 
-from eth_utils import (
+from platon_utils import (
     big_endian_to_int,
     decode_hex,
     int_to_big_endian,
     to_normalized_address,
 )
-from eth_utils.toolz import (
+from platon_utils.toolz import (
     complement,
 )
 from hypothesis import (
@@ -17,10 +17,10 @@ from hypothesis import (
 )
 import pytest
 
-from eth_abi.constants import (
+from platon_abi.constants import (
     TT256M1,
 )
-from eth_abi.decoding import (
+from platon_abi.decoding import (
     AddressDecoder,
     BooleanDecoder,
     BytesDecoder,
@@ -34,18 +34,18 @@ from eth_abi.decoding import (
     UnsignedFixedDecoder,
     UnsignedIntegerDecoder,
 )
-from eth_abi.exceptions import (
+from platon_abi.exceptions import (
     DecodingError,
     InsufficientDataBytes,
     NonEmptyPaddingBytes,
 )
-from eth_abi.registry import (
+from platon_abi.registry import (
     registry,
 )
-from eth_abi.utils.numeric import (
+from platon_abi.utils.numeric import (
     ceil32,
 )
-from eth_abi.utils.padding import (
+from platon_abi.utils.padding import (
     zpad32,
 )
 

@@ -1,6 +1,7 @@
 import abc
 import codecs
 import decimal
+import struct
 from itertools import (
     accumulate,
 )
@@ -10,7 +11,8 @@ from typing import (
     Type,
 )
 
-from eth_utils import (
+import rlp
+from platon_utils import (
     int_to_big_endian,
     is_address,
     is_boolean,
@@ -22,17 +24,17 @@ from eth_utils import (
     to_canonical_address,
 )
 
-from eth_abi.base import (
+from platon_abi.base import (
     BaseCoder,
     parse_tuple_type_str,
     parse_type_str,
 )
-from eth_abi.exceptions import (
+from platon_abi.exceptions import (
     EncodingTypeError,
     IllegalValue,
     ValueOutOfBounds,
 )
-from eth_abi.utils.numeric import (
+from platon_abi.utils.numeric import (
     TEN,
     abi_decimal_context,
     ceil32,
@@ -41,14 +43,15 @@ from eth_abi.utils.numeric import (
     compute_unsigned_fixed_bounds,
     compute_unsigned_integer_bounds,
 )
-from eth_abi.utils.padding import (
+from platon_abi.utils.padding import (
     fpad,
     zpad,
     zpad_right,
 )
-from eth_abi.utils.string import (
+from platon_abi.utils.string import (
     abbr,
 )
+from platon_utils import encode_hex, remove_0x_prefix
 
 
 class BaseEncoder(BaseCoder, metaclass=abc.ABCMeta):
@@ -57,6 +60,7 @@ class BaseEncoder(BaseCoder, metaclass=abc.ABCMeta):
     custom encoder class.  Subclasses must also implement
     :any:`BaseCoder.from_type_str`.
     """
+
     @abc.abstractmethod
     def encode(self, value: Any) -> bytes:  # pragma: no cover
         """
@@ -76,10 +80,10 @@ class BaseEncoder(BaseCoder, metaclass=abc.ABCMeta):
 
     @classmethod
     def invalidate_value(
-        cls,
-        value: Any,
-        exc: Type[Exception]=EncodingTypeError,
-        msg: Optional[str]=None,
+            cls,
+            value: Any,
+            exc: Type[Exception] = EncodingTypeError,
+            msg: Optional[str] = None,
     ) -> None:
         """
         Throws a standard exception for when a value is not encodable by an
@@ -170,6 +174,13 @@ class TupleEncoder(BaseEncoder):
         )
 
         return cls(encoders=encoders)
+
+
+class WasmTupleEncoder(TupleEncoder):
+
+    def encode(self, values):
+        self.validate_value(values)
+        return [encoder(value) for value, encoder in zip(values, self.encoders)]
 
 
 class FixedSizeEncoder(BaseEncoder):
@@ -266,8 +277,8 @@ class NumberEncoder(Fixed32ByteSizeEncoder):
             self.invalidate_value(value)
 
         illegal_value = (
-            self.illegal_value_fn is not None and
-            self.illegal_value_fn(value)
+                self.illegal_value_fn is not None and
+                self.illegal_value_fn(value)
         )
         if illegal_value:
             self.invalidate_value(value, exc=IllegalValue)
@@ -310,6 +321,13 @@ class PackedUnsignedIntegerEncoder(UnsignedIntegerEncoder):
         )
 
 
+class WasmUnsignedIntegerEncoder(UnsignedIntegerEncoder):
+
+    def encode(self, value):
+        self.validate_value(value)
+        return self.encode_fn(value)
+
+
 class SignedIntegerEncoder(NumberEncoder):
     bounds_fn = staticmethod(compute_signed_integer_bounds)
     type_check_fn = staticmethod(is_integer)
@@ -340,6 +358,45 @@ class PackedSignedIntegerEncoder(SignedIntegerEncoder):
             value_bit_size=abi_type.sub,
             data_byte_size=abi_type.sub // 8,
         )
+
+
+class WasmSignedIntegerEncoder(SignedIntegerEncoder):
+    def encode(self, value):
+        self.validate_value(value)
+        value = (value << 1) ^ (value >> 63)
+        return value.to_bytes((value.bit_length() + 7) // 8 or 1, "big")
+
+
+class WasmFloatEncoder(BaseEncoder):
+
+    @parse_type_str('float')
+    def from_type_str(cls, abi_type, registry):
+        return cls()
+
+    def validate_value(self, value):
+        if type(value) is not float:
+            raise TypeError(f"Type mismatch, the expectation type is float, but actual value is {value}.")
+
+    def encode(self, value):
+        self.validate_value(value)
+        bytes_value = struct.pack('>f', value)
+        return [remove_0x_prefix(hex(b)).zfill(2) for b in bytes_value]
+
+
+class WasmDoubleEncoder(BaseEncoder):
+
+    @parse_type_str('double')
+    def from_type_str(cls, abi_type, registry):
+        return cls()
+
+    def validate_value(self, value):
+        if type(value) is not int:
+            raise TypeError(f"Type mismatch, the expectation type is float, but actual value is {value}.")
+
+    def encode(self, value):
+        self.validate_value(value)
+        bytes_value = struct.pack('>d', value)
+        return [remove_0x_prefix(hex(b)).zfill(2) for b in bytes_value]
 
 
 class BaseFixedEncoder(NumberEncoder):
@@ -555,6 +612,21 @@ class PackedByteStringEncoder(ByteStringEncoder):
         return value
 
 
+class WasmFixedHashEncoder(PackedByteStringEncoder):
+
+    @classmethod
+    def validate_value(cls, value):
+        try:
+            bytes.fromhex(value)
+            return True
+        except:
+            cls.invalidate_value(value)
+
+    @parse_type_str('FixedHash')
+    def from_type_str(cls, abi_type, registry):
+        return cls()
+
+
 class TextStringEncoder(BaseEncoder):
     is_dynamic = True
 
@@ -681,6 +753,14 @@ class PackedArrayEncoder(BaseArrayEncoder):
             return cls(item_encoder=item_encoder)
 
 
+class WasmArrayEncoder(PackedArrayEncoder):
+
+    def encode(self, value):
+        self.validate_value(value)
+
+        return [self.item_encoder(i) for i in value]
+
+
 class SizedArrayEncoder(BaseArrayEncoder):
     array_size = None
 
@@ -723,3 +803,4 @@ class DynamicArrayEncoder(BaseArrayEncoder):
         encoded_value = encoded_size + encoded_elements
 
         return encoded_value
+

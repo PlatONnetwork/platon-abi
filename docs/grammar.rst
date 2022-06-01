@@ -3,7 +3,7 @@
 Grammar
 =======
 
-The ``eth-abi`` library exposes its type string parsing and normalization
+The ``platon-abi`` library exposes its type string parsing and normalization
 facilities as part of its public API.
 
 .. _grammar-parsing-a-type-string:
@@ -16,7 +16,7 @@ and do various operations with the results:
 
 .. doctest::
 
-    >>> from eth_abi.grammar import ABIType, BasicType, TupleType, parse
+    >>> from platon_abi.grammar import ABIType, BasicType, TupleType, parse
 
     >>> tuple_type = parse('(int256,bytes,ufixed128x18,bool[])[2]')
 
@@ -68,21 +68,21 @@ because the bit-width of ``int`` types must be a multiple of ``8``:
 
 .. doctest::
 
-    >>> from eth_abi.grammar import parse
+    >>> from platon_abi.grammar import parse
 
     >>> basic_type = parse('uint9')
     >>> # The basic type is not valid because the int type's bit-width is not valid
     >>> basic_type.validate()
     Traceback (most recent call last):
         ...
-    eth_abi.exceptions.ABITypeError: For 'uint9' type at column 1 in 'uint9': integer size must be multiple of 8
+    platon_abi.exceptions.ABITypeError: For 'uint9' type at column 1 in 'uint9': integer size must be multiple of 8
 
     >>> tuple_type = parse('(bool,uint9)')
     >>> # The tuple type is not valid because it contains an int type with an invalid bit-width
     >>> tuple_type.validate()
     Traceback (most recent call last):
         ...
-    eth_abi.exceptions.ABITypeError: For 'uint9' type at column 7 in '(bool,uint9)': integer size must be multiple of 8
+    platon_abi.exceptions.ABITypeError: For 'uint9' type at column 7 in '(bool,uint9)': integer size must be multiple of 8
 
 .. _grammar-normalizing-type-strings:
 
@@ -94,12 +94,12 @@ converting type aliases like ``uint`` to ``uint256`` and so forth:
 
 .. doctest::
 
-    >>> from eth_abi.grammar import normalize
+    >>> from platon_abi.grammar import normalize
     >>> normalize('uint')
     'uint256'
     >>> normalize('(uint,(ufixed,function))')
     '(uint256,(ufixed128x18,bytes24))'
 
-Internally, ``eth-abi`` will only normalize type strings just before creating
+Internally, ``platon-abi`` will only normalize type strings just before creating
 coders for a type.  This is done automatically such that type strings passed to
-``eth-abi`` do not need to be normalized before hand.
+``platon-abi`` do not need to be normalized before hand.

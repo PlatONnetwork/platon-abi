@@ -8,7 +8,7 @@ from typing import (
     Union,
 )
 
-from eth_typing import (
+from platon_typing import (
     abi,
 )
 
@@ -53,6 +53,7 @@ class PredicateMapping(Copyable):
     when their corresponding predicate matches a given input.  Predicates can
     also be labeled to facilitate removal from the mapping.
     """
+
     def __init__(self, name):
         self._name = name
         self._values = {}
@@ -189,8 +190,8 @@ class Predicate:
 
     def __eq__(self, other):
         return (
-            type(self) is type(other) and
-            tuple(self) == tuple(other)
+                type(self) is type(other) and
+                tuple(self) == tuple(other)
         )
 
 
@@ -359,7 +360,7 @@ class ABIRegistry(Copyable, BaseRegistry):
         return coder
 
     @_clear_encoder_cache
-    def register_encoder(self, lookup: Lookup, encoder: Encoder, label: str=None) -> None:
+    def register_encoder(self, lookup: Lookup, encoder: Encoder, label: str = None) -> None:
         """
         Registers the given ``encoder`` under the given ``lookup``.  A unique
         string label may be optionally provided that can be used to refer to
@@ -380,7 +381,7 @@ class ABIRegistry(Copyable, BaseRegistry):
         self._unregister(self._encoders, lookup_or_label)
 
     @_clear_decoder_cache
-    def register_decoder(self, lookup: Lookup, decoder: Decoder, label: str=None) -> None:
+    def register_decoder(self, lookup: Lookup, decoder: Decoder, label: str = None) -> None:
         """
         Registers the given ``decoder`` under the given ``lookup``.  A unique
         string label may be optionally provided that can be used to refer to
@@ -400,7 +401,7 @@ class ABIRegistry(Copyable, BaseRegistry):
         """
         self._unregister(self._decoders, lookup_or_label)
 
-    def register(self, lookup: Lookup, encoder: Encoder, decoder: Decoder, label: str=None) -> None:
+    def register(self, lookup: Lookup, encoder: Encoder, decoder: Decoder, label: str = None) -> None:
         """
         Registers the given ``encoder`` and ``decoder`` under the given
         ``lookup``.  A unique string label may be optionally provided that can
@@ -454,7 +455,7 @@ class ABIRegistry(Copyable, BaseRegistry):
         """
         Returns ``True`` if an encoder is found for the given type string
         ``type_str``.  Otherwise, returns ``False``.  Raises
-        :class:`~eth_abi.exceptions.MultipleEntriesFound` if multiple encoders
+        :class:`~platon_abi.exceptions.MultipleEntriesFound` if multiple encoders
         are found.
         """
         try:
@@ -610,3 +611,76 @@ registry_packed.register_encoder(
     encoding.TupleEncoder,
     label='is_base_tuple',
 )
+
+registry_wasm = ABIRegistry()
+
+registry_wasm.register_encoder(
+    BaseEquals('string'),
+    encoding.PackedTextStringEncoder,
+    label='string',
+)
+registry_wasm.register_encoder(
+    BaseEquals('uint'),
+    encoding.WasmUnsignedIntegerEncoder,
+    label='uint',
+)
+registry_wasm.register_encoder(
+    BaseEquals('int'),
+    encoding.WasmSignedIntegerEncoder,
+    label='int',
+)
+registry_wasm.register_encoder(
+    BaseEquals('float'),
+    encoding.WasmFloatEncoder,
+    label='float',
+)
+registry_wasm.register_encoder(
+    BaseEquals('double'),
+    encoding.WasmDoubleEncoder,
+    label='double',
+)
+registry_wasm.register_encoder(
+    BaseEquals('bool'),
+    encoding.PackedBooleanEncoder,
+    label='bool',
+)
+registry_wasm.register_encoder(
+    BaseEquals('address'),
+    encoding.PackedAddressEncoder,
+    label='address',
+)
+registry_wasm.register_encoder(
+    has_arrlist,
+    encoding.WasmArrayEncoder,
+    label='has_arrlist',
+)
+# registry_wasm.register_encoder(
+#     BaseEquals('ufixed'),
+#     encoding.PackedUnsignedFixedEncoder,
+#     label='ufixed',
+# )
+# registry_wasm.register_encoder(
+#     BaseEquals('fixed'),
+#     encoding.PackedSignedFixedEncoder,
+#     label='fixed',
+# )
+# registry_wasm.register_encoder(
+#     BaseEquals('bytes', with_sub=True),
+#     encoding.PackedBytesEncoder,
+#     label='bytes<M>',
+# )
+# registry_wasm.register_encoder(
+#     BaseEquals('FixedHash', with_sub=False),
+#     encoding.WasmFixedHashEncoder,
+#     label='FixedHash',
+# )
+# registry_wasm.register_encoder(
+#     BaseEquals('function'),
+#     encoding.PackedBytesEncoder,
+#     label='function',
+# )
+# registry_wasm.register_encoder(
+#     is_base_tuple,
+#     encoding.WasmTupleEncoder,
+#     label='is_base_tuple',
+# )

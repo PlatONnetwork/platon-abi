@@ -1,6 +1,6 @@
 import pytest
 
-from eth_abi.packed import (
+from platon_abi.packed import (
     encode_single_packed,
 )
 from tests.common.unit import (

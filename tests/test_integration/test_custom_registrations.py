@@ -1,18 +1,18 @@
-from eth_abi.abi import (
+from platon_abi.abi import (
     decode_single,
     encode_single,
 )
-from eth_abi.decoding import (
+from platon_abi.decoding import (
     BaseDecoder,
 )
-from eth_abi.encoding import (
+from platon_abi.encoding import (
     BaseEncoder,
 )
-from eth_abi.exceptions import (
+from platon_abi.exceptions import (
     DecodingError,
     EncodingError,
 )
-from eth_abi.registry import (
+from platon_abi.registry import (
     registry,
 )
 

@@ -3,7 +3,7 @@
 To start development you should begin by cloning the repo.
 
 ```bash
-$ git clone git@github.com/ethereum/eth-abi.git
+$ git clone git@github.com/platonnetwork/platon-abi.git
 ```
 
 

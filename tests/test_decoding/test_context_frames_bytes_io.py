@@ -1,6 +1,6 @@
 import pytest
 
-from eth_abi.decoding import (
+from platon_abi.decoding import (
     ContextFramesBytesIO,
 )
 

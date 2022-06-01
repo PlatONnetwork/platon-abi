@@ -11,7 +11,7 @@ follows:
 
 .. doctest::
 
-    >>> from eth_abi import encode_single, encode_abi
+    >>> from platon_abi import encode_single, encode_abi
 
     >>> encode_single('uint256', 12345)
     b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x0009'
@@ -41,7 +41,7 @@ for a given ABI type using :any:`encode_single`:
 
 .. doctest::
 
-    >>> from eth_abi import is_encodable
+    >>> from platon_abi import is_encodable
 
     >>> is_encodable('int', 2)
     True
@@ -60,16 +60,16 @@ Non-Standard Packed Mode Encoding
 
 .. warning::
 
-    Non-standard packed mode encoding is an experimental feature in the eth-abi
+    Non-standard packed mode encoding is an experimental feature in the platon-abi
     library.  Use at your own risk and please report any problems at
-    https://github.com/ethereum/eth-abi/issues.
+    https://github.com/platonnetwork/platon-abi/issues.
 
 In certain cases, the Solidity programming language uses a non-standard packed
 encoding.  You can encode values in this format like so:
 
 .. doctest::
 
-    >>> from eth_abi.packed import encode_single_packed, encode_abi_packed
+    >>> from platon_abi.packed import encode_single_packed, encode_abi_packed
 
     >>> encode_single_packed('uint32', 12345)
     b'\x00\x0009'

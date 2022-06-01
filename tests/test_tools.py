@@ -6,11 +6,11 @@ from hypothesis import (
 )
 import pytest
 
-from eth_abi.exceptions import (
+from platon_abi.exceptions import (
     NoEntriesFound,
     ParseError,
 )
-from eth_abi.tools import (
+from platon_abi.tools import (
     get_abi_strategy,
 )
 

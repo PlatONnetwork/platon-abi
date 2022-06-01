@@ -1,12 +1,12 @@
 import pytest
 
-from eth_abi.abi import (
+from platon_abi.abi import (
     decode_abi,
 )
-from eth_abi.exceptions import (
+from platon_abi.exceptions import (
     DecodingError,
 )
-from eth_abi.grammar import (
+from platon_abi.grammar import (
     parse,
 )
 

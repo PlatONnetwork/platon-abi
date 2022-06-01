@@ -1,6 +1,6 @@
 import pytest
 
-from eth_abi.utils.string import (
+from platon_abi.utils.string import (
     abbr,
 )
 

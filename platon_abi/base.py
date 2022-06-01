@@ -1,6 +1,6 @@
 import functools
 
-from eth_typing.abi import (
+from platon_typing.abi import (
     TypeStr,
 )
 
