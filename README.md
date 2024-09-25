@@ -4,7 +4,6 @@
 [![Build Status](https://circleci.com/gh/platonnetwork/platon-abi.svg?style=shield)](https://circleci.com/gh/platonnetwork/platon-abi)
 [![PyPI version](https://badge.fury.io/py/platon_abi.svg)](https://badge.fury.io/py/platon_abi)
 [![Python versions](https://img.shields.io/pypi/pyversions/platon_abi.svg)](https://pypi.python.org/pypi/platon_abi)
-[![Docs build](https://readthedocs.org/projects/platon-abi/badge/?version=latest)](http://platon-abi.readthedocs.io/en/latest/?badge=latest)
    
 
 Python utilities for working with platon ABI definitions, especially encoding and decoding
